@@ -12,7 +12,7 @@ You can instantiate a repository once and do anything with it in any order, and 
 
 Among the added functionality is the ability to override or 'temporarily' set and remove Criteria, post-processing models after retrieval.
 
-I'm well aware that there is *much* to say against using Repositories like this (and the repository pattern in general), but I find they have their uses.
+I'm well aware that there is _much_ to say against using Repositories like this (and the repository pattern in general), but I find they have their uses.
 I prefer using them to make for easier unit testing in large projects.
 
 > Note: I recommand against using this package. I'm making some updates for my personal legacy projects,
@@ -21,7 +21,7 @@ I prefer using them to make for easier unit testing in large projects.
 ## Version Compatibility
 
 | Laravel    | Package  |
-|:-----------|:---------|
+| :--------- | :------- |
 | 5.1        | 1.0      |
 | 5.2        | 1.2      |
 | 5.3        | 1.2      |
@@ -38,27 +38,25 @@ I prefer using them to make for easier unit testing in large projects.
 Version 4.0 has many breaking changes.
 Refer to the [Changelog](CHANGELOG.md) for details.
 
-
 ## Install
 
 Via Composer
 
-``` bash
+```bash
 $ composer require czim/laravel-repository
 ```
 
 If you want to use the repository generator through the `make:repository` Artisan command, add the `RepositoryServiceProvider` to your `config/app.php`:
 
-``` php
+```php
 Czim\Repository\RepositoryServiceProvider::class,
 ```
 
 Publish the repostory configuration file.
 
-``` bash
+```bash
 php artisan vendor:publish --tag="repository"
 ```
-
 
 ## Basic Usage
 
@@ -66,16 +64,15 @@ Simply extend the (abstract) repository class of your choice, either `Czim\Repos
 
 The only abstract method that must be provided is the `model` method (this is just like the way Bosnadev's repositories are used).
 
-
 ### Base- and Extended Repositories
 
 Depending on what you require, three different abstract repository classes may be extended:
 
-* `BaseRepository`
+- `BaseRepository`
 
     Only has the retrieval and simple manipulation methods (`create()`, `update()` and `delete()`), and Criteria handling.
 
-* `ExtendedRepository`
+- `ExtendedRepository`
 
     Handles an **active** check for Models, which will by default exclude any model which will not have its `active` attribute set to true (configurable by setting `hasActive` and/or `activeColumn`).
     Handles caching, using [dwightwatson/rememberable](https://github.com/dwightwatson/rememberable) by default (but you can use your own Caching Criteria if desired).
@@ -85,17 +82,16 @@ Depending on what you require, three different abstract repository classes may b
 
 Apart from the basic stuff (inspired by Bosnadev), there are some added methods for retrieval:
 
-* `query()`: returns an Eloquent\Builder object reflecting the active criteria, for added flexibility
-* `count()`
-* `first()`
-* `findOrFail()`: just like `find()`, but throws an exception if nothing found
-* `firstOrFail()`: just like `first()`, but throws an exception if nothing found
+- `query()`: returns an Eloquent\Builder object reflecting the active criteria, for added flexibility
+- `count()`
+- `first()`
+- `findOrFail()`: just like `find()`, but throws an exception if nothing found
+- `firstOrFail()`: just like `first()`, but throws an exception if nothing found
 
 Every retrieval method takes into account the currently active Criteria (including one-time overrides), see below.
 
 For the `ExtendedPostProcessingRepository` goes that postprocessors affect all models returned, and so are applied in all the retrieval methods (`find()`, `firstOrFail()`, `all()`, `allCallback`, etc).
 The `query()` method returns a Builder object and therefore circumvents postprocessing. If you want to manually use the postprocessors, simply call `postProcess()` on any Model or Collection of models.
-
 
 #### Handling Criteria
 
@@ -104,13 +100,13 @@ It is also possible to set default Criteria for the repository by overriding the
 
 Criteria may be defined or pushed onto the repository by **key**, like so:
 
-``` php
+```php
     $repository->pushCriteria(new SomeCriteria(), 'KeyForCriteria');
 ```
 
 This allows you to later remove the Criteria by referring to its key:
 
-``` php
+```php
     // you can remove Criteria by key
     $repository->removeCriteria('KeyForCriteria');
 ```
@@ -118,7 +114,7 @@ This allows you to later remove the Criteria by referring to its key:
 To change the Criteria that are to be used only for one call, there are helper methods that will preserve your currently active Criteria.
 If you use any of the following, the active Criteria are applied (insofar they are not removed or overridden), and additional Criteria are applied only for the next retrieval method.
 
-``` php
+```php
     // you can push one-time Criteria
     $repository->pushCriteriaOnce(new SomeOtherCriteria());
 
@@ -129,32 +125,32 @@ If you use any of the following, the active Criteria are applied (insofar they a
     $repository->removeCriteriaOnce('KeyForCriteria');
 ```
 
-Note that this means that *only* Criteria that have keys can be removed or overridden this way.
+Note that this means that _only_ Criteria that have keys can be removed or overridden this way.
 A `CriteriaKey` Enum is provided to more easily refer to the standard keys used in the `ExtendedRepository`, such as 'active', 'cache' and 'scope'.
 
-
 ## Configuration
+
 No configuration is required to start using the repository. You use it by extending an abstract repository class of your choice.
 
 ### Extending the classes
+
 Some properties and methods may be extended for tweaking the way things work.
 For now there is no documentation about this (I will add some later), but the repository classes contain many comments to help you find your way (mainly check the `ExtendedRepository` class).
 
 ### Traits
+
 Additionally, there are some traits that may be used to extend the functionality of the repositories, see `Czim\Repository\Traits`:
 
-* `FindsModelsByTranslationTrait` (only useful in combination with the [dimsav/laravel-translatable](https://github.com/dimsav/laravel-translatable) package)
-* `HandlesEloquentRelationManipulationTrait`
-* `HandlesEloquentSavingTrait`
-* `HandlesListifyModelsTrait` (only useful in combination with the [lookitsatravis/listify](https://github.com/lookitsatravis/listify) package)
+- `FindsModelsByTranslationTrait` (only useful in combination with the [dimsav/laravel-translatable](https://github.com/dimsav/laravel-translatable) package)
+- `HandlesEloquentRelationManipulationTrait`
+- `HandlesEloquentSavingTrait`
+- `HandlesListifyModelsTrait` (only useful in combination with the [lookitsatravis/listify](https://github.com/lookitsatravis/listify) package)
 
 I've added these mainly because they may help in using the repository pattern as a means to make unit testing possible without having to mock Eloquent models.
-
 
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
 
 ## Credits
 
@@ -168,7 +164,6 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-version]: https://img.shields.io/packagist/v/czim/laravel-repository.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/czim/laravel-repository.svg?style=flat-square
-
 [link-packagist]: https://packagist.org/packages/czim/laravel-repository
 [link-downloads]: https://packagist.org/packages/czim/laravel-repository
 [link-author]: https://github.com/czim

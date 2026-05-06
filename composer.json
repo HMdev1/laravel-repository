@@ -1,5 +1,5 @@
 {
-    "name": "czim/laravel-repository",
+    "name": "hmdev1/laravel-repository",
     "description": "Repository for Laravel (inspired by and indebted to Bosnadev/Repositories)",
     "keywords": [
         "laravel",
@@ -9,7 +9,7 @@
         "database",
         "criteria"
     ],
-    "homepage": "https://github.com/czim/laravel-repository",
+    "homepage": "https://github.com/HMdev1/laravel-repository",
     "license": "MIT",
     "authors": [
         {
@@ -21,18 +21,18 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/support": "^11.0 || ^12.0",
-        "illuminate/database": "^11.0 || ^12.0",
+        "illuminate/support": "^11.0 || ^12.0 || ^13.0",
+        "illuminate/database": "^11.0 || ^12.0 || ^13.0",
         "myclabs/php-enum": "^1.7"
     },
     "require-dev": {
         "astrotomic/laravel-translatable": "^11.10",
         "czim/laravel-listify": "^2.0",
-        "orchestra/testbench": "^8.0 || ^9.0",
+        "orchestra/testbench": "^8.0 || ^9.0 || ^10.0",
         "larastan/larastan": "^2.10 || 3.3",
         "phpstan/phpstan-mockery": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
-        "phpunit/phpunit": "^10 || ^11.0",
+        "phpunit/phpunit": "^10 || ^11.0 || ^12.0",
         "watson/rememberable": "^6.0"
     },
     "autoload": {
